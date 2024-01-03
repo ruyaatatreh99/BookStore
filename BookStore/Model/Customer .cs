@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BookStore.Model
 {
-    [Table("Book")]
+    [Table("Customer")]
     public class Customer
     {
         [Key]
@@ -12,6 +12,5 @@ namespace BookStore.Model
         [Required]
         public string? Name { get; set; }
         public string? Email { get; set; }
-        public List<string>? reviews { get; set; }
     }
 }

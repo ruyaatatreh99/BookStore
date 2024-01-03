@@ -2,29 +2,24 @@
 
 namespace BookStore.Services
 {
-    public class BookService : IBook
+    public class BookWebService : IBookWeb
     {
-        public Book AddBook(Book book)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteBook(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Book> GetAllBooks()
-        {
-            throw new NotImplementedException();
-        }
-
         public Book GetBookById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Book UpdateBook(Book book, int id)
+        public void RatingBook(int bookid, int rating)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void reviewBook(int bookid, string review, Customer customer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Book> ViewBookByCatgory(string Catgory)
         {
             throw new NotImplementedException();
         }
