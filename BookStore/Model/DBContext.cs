@@ -11,6 +11,8 @@ namespace BookStore.Model
     {
         public DBContext(DbContextOptions<DBContext> options) : base(options) { }
 
-        public DbSet<Book> Tasks { get; set; }
+        public DbSet<Book> Book { get; set; }
+        public DbSet<Customer> Customer { get; set; }
+        public DbSet<Review> Review { get; set; }
     }
 }

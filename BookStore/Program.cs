@@ -1,3 +1,7 @@
+using BookStore.Model;
+using BookStore.Services;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +10,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<DBContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ConStr")));
+
+builder.Services.AddScoped<IBook, BookService>();
+builder.Services.AddScoped<IBookWeb, BookWebService>();
 
 var app = builder.Build();
 

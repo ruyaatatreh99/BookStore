@@ -14,6 +14,11 @@ namespace BookStore.Services
             throw new NotImplementedException();
         }
 
+        public IEnumerable<Book> RecommendationBook()
+        {
+            throw new NotImplementedException();
+        }
+
         public void reviewBook(int bookid, string review, Customer customer)
         {
             throw new NotImplementedException();
