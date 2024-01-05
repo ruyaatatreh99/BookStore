@@ -8,7 +8,9 @@ namespace BookStore.Services
         void reviewBook(int bookid,string review, Customer customer);
         IEnumerable<Book> ViewBookByCatgory(string Catgory);
         IEnumerable<Book> RecommendationBook();
-
         Book GetBookById(int id);
+        Book GetBookBySearch(string name);
+        int BuyBook(Book book);
+        void CheckOut();
     }
 }

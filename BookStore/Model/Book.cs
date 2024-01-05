@@ -9,7 +9,7 @@ namespace BookStore.Model
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ID { get; set; }
+        public int ISBN { get; set; }
         [Required]
         public string? Title { get; set; }
         public string? Description { get; set; }
@@ -19,7 +19,11 @@ namespace BookStore.Model
         [Required]
         public string? Category { get; set; }
         [Required]
+        public string? author { get; set; }
+        [Required]
         public int status { get; set; }
-        public List<string>? reviews { get; set; }
+        [Required]
+        public double price { get; set; }
+
     }
 }

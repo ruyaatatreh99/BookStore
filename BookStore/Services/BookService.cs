@@ -1,32 +1,67 @@
 ﻿using BookStore.Model;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 
 namespace BookStore.Services
 {
     public class BookService : IBook
     {
+        private DBContext _db;
+        public BookService(DBContext db)
+        {
+            _db = db;
+        }
         public Book AddBook(Book book)
         {
-            throw new NotImplementedException();
+            _db.Book.Add(book);
+            _db.SaveChanges();
+            return book;
         }
 
         public void DeleteBook(int id)
         {
-            throw new NotImplementedException();
+            var book = _db.Book.First(x => x.ISBN == id);
+            _db.Book.Remove(book);
+            _db.SaveChanges();
         }
 
         public IEnumerable<Book> GetAllBooks()
         {
-            throw new NotImplementedException();
+            IEnumerable<Book> booksList;
+            try
+            {
+                booksList = _db.Book.OrderBy(book =>book.ISBN).ToList();
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return booksList;
         }
 
         public Book GetBookById(int id)
         {
-            throw new NotImplementedException();
+            var check = _db.Book.First(x => x.ISBN == id);
+            return check;
         }
+
 
         public Book UpdateBook(Book book, int id)
         {
-            throw new NotImplementedException();
+            var check = _db.Book.First(x => x.ISBN == id);
+            check.NoBook = book.NoBook;
+            check.Title = book.Title;
+            check.Description = book.Description;
+            check.rating = book.rating;
+            check.NoPurchased = book.NoPurchased;
+            check.Category = book.Category;
+            check.author = book.Category;
+            check.status = book.status;
+            check.price = book.price;
+            _db.Book.Update(check);
+                _db.SaveChanges();
+                return check;
         }
     }
 }

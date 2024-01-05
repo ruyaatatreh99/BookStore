@@ -4,7 +4,22 @@ namespace BookStore.Services
 {
     public class BookWebService : IBookWeb
     {
+        public int BuyBook(Book book)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CheckOut()
+        {
+            throw new NotImplementedException();
+        }
+
         public Book GetBookById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Book GetBookBySearch(string name)
         {
             throw new NotImplementedException();
         }

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookStore.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20240103134319_init")]
+    [Migration("20240105134959_init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -26,11 +26,11 @@ namespace BookStore.Migrations
 
             modelBuilder.Entity("BookStore.Model.Book", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("ISBN")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ISBN"));
 
                     b.Property<string>("Category")
                         .IsRequired()
@@ -49,16 +49,20 @@ namespace BookStore.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("author")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("price")
+                        .HasColumnType("float");
+
                     b.Property<int>("rating")
                         .HasColumnType("int");
-
-                    b.Property<string>("reviews")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("status")
                         .HasColumnType("int");
 
-                    b.HasKey("ID");
+                    b.HasKey("ISBN");
 
                     b.ToTable("Book");
                 });
@@ -71,16 +75,56 @@ namespace BookStore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<string>("Email")
+                    b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
                     b.ToTable("Customer");
+                });
+
+            modelBuilder.Entity("BookStore.Model.Employee", b =>
+                {
+                    b.Property<int>("EmpID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmpID"));
+
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("role")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("EmpID");
+
+                    b.ToTable("Employee");
                 });
 
             modelBuilder.Entity("BookStore.Model.Review", b =>
@@ -97,7 +141,7 @@ namespace BookStore.Migrations
                     b.Property<string>("CustomerReview")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("bookid")
+                    b.Property<int>("ISBN")
                         .HasColumnType("int");
 
                     b.Property<int>("customerid")

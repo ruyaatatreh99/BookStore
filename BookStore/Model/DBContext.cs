@@ -14,5 +14,6 @@ namespace BookStore.Model
         public DbSet<Book> Book { get; set; }
         public DbSet<Customer> Customer { get; set; }
         public DbSet<Review> Review { get; set; }
+        public DbSet<Employee> Employee { get; set; }
     }
 }
