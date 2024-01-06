@@ -1,6 +1,6 @@
 ﻿using BookStore.Model;
 using System.Net;
-
+using System.Text.Json;
 namespace BookStore.Services
 {
     public class BookWebService : IBookWeb
@@ -10,21 +10,23 @@ namespace BookStore.Services
         {
             _db = db;
         }
-        public int BuyBook(Book book, int customerID)
+        public int BuyBook(int bookid, int customerID)
         {
-            var check = _db.ShoppingCart.FirstOrDefault(x => x.ISBN ==book.ISBN  && x.CustomerID== customerID);
-            if (check == null && book.NoBook !=0 && book.status != 0) {
-                var newitem=new ShoppingCart();
+            var book = _db.Book.First(b => b.ISBN == bookid);
+            var check = _db.ShoppingCart.FirstOrDefault(x => x.ISBN == bookid && x.CustomerID == customerID);
+
+            if (check == null && book.NoBook != 0 && book.status != 0)
+            {
+
+                ShoppingCart newitem =new ShoppingCart();
                 newitem.ISBN = book.ISBN;
                 newitem.CustomerID = customerID;
                 newitem.NoBook =1;
                 newitem.Bookprice = book.price;
 
-                var customer = _db.Customer.First(x =>x.ID== customerID);
-                customer.TotalNoBook += customer.TotalNoBook;
+                Customer customer = _db.Customer.First(x => x.ID == customerID);
                 customer.Totalprice += book.price;
-                _db.ShoppingCart.Add(newitem);
-                _db.SaveChanges();
+                customer.TotalNoBook += 1;
 
                 _db.Customer.Update(customer);
                 _db.SaveChanges();
@@ -38,6 +40,9 @@ namespace BookStore.Services
                 _db.Book.Update(book);
                 _db.SaveChanges();
 
+                _db.ShoppingCart.Add(newitem);
+                _db.SaveChanges();
+
                 return 1;
             }
            else if(check != null && book.NoBook != 0 && book.status != 0)
@@ -48,7 +53,7 @@ namespace BookStore.Services
                 check.Bookprice += book.price;
 
                 var customer = _db.Customer.First(x => x.ID == customerID);
-                customer.TotalNoBook += customer.TotalNoBook;
+                customer.TotalNoBook += 1;
                 customer.Totalprice += book.price;
                 _db.ShoppingCart.Update(check);
                 _db.SaveChanges();
@@ -69,8 +74,58 @@ namespace BookStore.Services
             }
             else return 0;
         }
+        public int DeleteBook(int bookid, int customerID)
+        {
+            var book = _db.Book.First(b => b.ISBN == bookid);
+            var check = _db.ShoppingCart.First(x => x.ISBN == bookid && x.CustomerID == customerID);
+
+            if (check.NoBook == 1 )
+            {
+                _db.ShoppingCart.Remove(check);
+                _db.SaveChanges();
+
+                Customer customer = _db.Customer.First(x => x.ID == customerID);
+                customer.Totalprice -= book.price;
+                customer.TotalNoBook -= 1;
+                _db.Customer.Update(customer);
+                _db.SaveChanges();
+
+                book.NoPurchased--;
+                book.NoBook++;
+                if (book.status == 0) book.status = 1;
+                _db.Book.Update(book);
+                _db.SaveChanges();
+
+                return 1;
+            }
+            else if (check.NoBook > 1)
+            {
+                check.NoBook--;
+                check.Bookprice -= book.price;
+                _db.ShoppingCart.Update(check);
+                _db.SaveChanges();
+
+                Customer customer = _db.Customer.First(x => x.ID == customerID);
+                customer.Totalprice -= book.price;
+                customer.TotalNoBook -= 1;
+                _db.Customer.Update(customer);
+                _db.SaveChanges();
+
+                book.NoPurchased--;
+                book.NoBook++;
+                if (book.status == 0) book.status = 1;
+                _db.Book.Update(book);
+                _db.SaveChanges();
+
+
+                return 2;
+            }
+            else return 0;
+        }
+
         public void CheckOut(int customerID)
         {
+            var customer = _db.Customer.First(x => x.ID == customerID);
             IEnumerable<ShoppingCart> booksList;
             booksList = _db.ShoppingCart.ToList();
             foreach (var item in booksList)
@@ -82,6 +137,8 @@ namespace BookStore.Services
                     _db.SaveChanges();
                 }
             }
+            customer.TotalNoBook = 0;
+            customer.Totalprice = 0;
             //Send booksList to  admin  
 
         }

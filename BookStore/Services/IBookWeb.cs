@@ -11,7 +11,8 @@ namespace BookStore.Services
         Book GetBookById(int id);
         IEnumerable<Book> GetBookBySearch(string name);
         IEnumerable<Review> ViewBookReview(int bookid);
-        int BuyBook(Book book,int customerID);
+        int BuyBook(int bookid, int customerID);
+       int  DeleteBook(int bookid, int customerID);
         void CheckOut(int customerID);
         IEnumerable<ShoppingCart> ViewShoppingCart(int customerID);
     }
