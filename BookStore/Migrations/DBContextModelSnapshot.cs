@@ -53,8 +53,8 @@ namespace BookStore.Migrations
                     b.Property<double>("price")
                         .HasColumnType("float");
 
-                    b.Property<int>("rating")
-                        .HasColumnType("int");
+                    b.Property<double>("rating")
+                        .HasColumnType("float");
 
                     b.Property<int>("status")
                         .HasColumnType("int");
@@ -75,6 +75,12 @@ namespace BookStore.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TotalNoBook")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Totalprice")
+                        .HasColumnType("float");
 
                     b.Property<string>("email")
                         .IsRequired()
@@ -147,6 +153,31 @@ namespace BookStore.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Review");
+                });
+
+            modelBuilder.Entity("BookStore.Model.ShoppingCart", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<double>("Bookprice")
+                        .HasColumnType("float");
+
+                    b.Property<int>("CustomerID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ISBN")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NoBook")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("ShoppingCart");
                 });
 #pragma warning restore 612, 618
         }

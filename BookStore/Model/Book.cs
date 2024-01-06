@@ -13,7 +13,7 @@ namespace BookStore.Model
         [Required]
         public string? Title { get; set; }
         public string? Description { get; set; }
-        public int rating { get; set; }
+        public double rating { get; set; }
         public int NoBook { get; set; }
         public int NoPurchased { get; set; }
         [Required]

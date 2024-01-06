@@ -17,5 +17,9 @@ namespace BookStore.Model
         [Required(ErrorMessage = "Email required")]
         [EmailAddress]
         public string? email { get; set; }
+        [Required]
+        public int TotalNoBook { get; set; }
+        [Required]
+        public double Totalprice { get; set; }
     }
 }

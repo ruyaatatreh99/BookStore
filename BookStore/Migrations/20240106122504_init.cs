@@ -18,7 +18,7 @@ namespace BookStore.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    rating = table.Column<int>(type: "int", nullable: false),
+                    rating = table.Column<double>(type: "float", nullable: false),
                     NoBook = table.Column<int>(type: "int", nullable: false),
                     NoPurchased = table.Column<int>(type: "int", nullable: false),
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -39,7 +39,9 @@ namespace BookStore.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    email = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TotalNoBook = table.Column<int>(type: "int", nullable: false),
+                    Totalprice = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -79,6 +81,22 @@ namespace BookStore.Migrations
                 {
                     table.PrimaryKey("PK_Review", x => x.ID);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "ShoppingCart",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ISBN = table.Column<int>(type: "int", nullable: false),
+                    CustomerID = table.Column<int>(type: "int", nullable: false),
+                    NoBook = table.Column<int>(type: "int", nullable: false),
+                    Bookprice = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShoppingCart", x => x.ID);
+                });
         }
 
         /// <inheritdoc />
@@ -95,6 +113,9 @@ namespace BookStore.Migrations
 
             migrationBuilder.DropTable(
                 name: "Review");
+
+            migrationBuilder.DropTable(
+                name: "ShoppingCart");
         }
     }
 }

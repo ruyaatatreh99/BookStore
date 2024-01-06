@@ -4,13 +4,15 @@ namespace BookStore.Services
 {
     public interface IBookWeb
     {
-        void RatingBook(int bookid,int rating);
-        void reviewBook(int bookid,string review, Customer customer);
+        int RatingBook(int bookid,int rating);
+        int reviewBook(int bookid,string review, int customerid);
         IEnumerable<Book> ViewBookByCatgory(string Catgory);
         IEnumerable<Book> RecommendationBook();
         Book GetBookById(int id);
-        Book GetBookBySearch(string name);
-        int BuyBook(Book book);
-        void CheckOut();
+        IEnumerable<Book> GetBookBySearch(string name);
+        IEnumerable<Review> ViewBookReview(int bookid);
+        int BuyBook(Book book,int customerID);
+        void CheckOut(int customerID);
+        IEnumerable<ShoppingCart> ViewShoppingCart(int customerID);
     }
 }
