@@ -16,5 +16,6 @@ namespace BookStore.Model
         public DbSet<Review> Review { get; set; }
         public DbSet<Employee> Employee { get; set; }
         public DbSet<ShoppingCart> ShoppingCart { get; set; }
-}
+        public DbSet<Order> Order { get; set; }
+    }
 }

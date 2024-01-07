@@ -1,3 +1,4 @@
+using AutoMapper;
 using BookStore.Model;
 using BookStore.Services;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,13 @@ builder.Services.AddDbContext<DBContext>(options =>
 
 builder.Services.AddScoped<IBook, BookService>();
 builder.Services.AddScoped<IBookWeb, BookWebService>();
+builder.Services.AddAutoMapper(typeof(Program));
+// Auto Mapper Configurations  
+var mappingConfig = new MapperConfiguration(mc => {
+    mc.AddProfile(new CP());
+});
+IMapper mapper = mappingConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 builder.Services.AddControllersWithViews();
 var app = builder.Build();
 

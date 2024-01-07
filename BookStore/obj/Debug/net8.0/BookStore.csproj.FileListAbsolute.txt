@@ -136,3 +136,5 @@ C:\Users\Ruya\source\repos\BookStore\BookStore\obj\Debug\net8.0\refint\BookStore
 C:\Users\Ruya\source\repos\BookStore\BookStore\obj\Debug\net8.0\BookStore.pdb
 C:\Users\Ruya\source\repos\BookStore\BookStore\obj\Debug\net8.0\BookStore.genruntimeconfig.cache
 C:\Users\Ruya\source\repos\BookStore\BookStore\obj\Debug\net8.0\ref\BookStore.dll
+C:\Users\Ruya\source\repos\BookStore\BookStore\bin\Debug\net8.0\AutoMapper.dll
+C:\Users\Ruya\source\repos\BookStore\BookStore\bin\Debug\net8.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

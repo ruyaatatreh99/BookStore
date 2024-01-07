@@ -90,6 +90,10 @@ namespace BookStore.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("ID");
 
                     b.ToTable("Customer");
@@ -128,6 +132,40 @@ namespace BookStore.Migrations
                     b.HasKey("EmpID");
 
                     b.ToTable("Employee");
+                });
+
+            modelBuilder.Entity("BookStore.Model.Order", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<double>("Bookprice")
+                        .HasColumnType("float");
+
+                    b.Property<string>("CustomerAdrress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomerPhone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ISBN")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NoBook")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("BookStore.Model.Review", b =>

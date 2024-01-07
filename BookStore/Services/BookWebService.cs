@@ -1,6 +1,11 @@
 ﻿using BookStore.Model;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Text.Json;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+
 namespace BookStore.Services
 {
     public class BookWebService : IBookWeb
@@ -122,25 +127,32 @@ namespace BookStore.Services
             }
             else return 0;
         }
-
         public void CheckOut(int customerID)
         {
             var customer = _db.Customer.First(x => x.ID == customerID);
             IEnumerable<ShoppingCart> booksList;
             booksList = _db.ShoppingCart.ToList();
+            Order order = new Order();
             foreach (var item in booksList)
             {
                 if (item.ID == customerID)
                 {
-                    booksList.Append(item);
+                    order.Bookprice = item.Bookprice;
+                    order.NoBook = item.NoBook;
+                    order.ISBN = item.ISBN;
+                    order.CustomerName = customer.Name;
+                    order.CustomerPhone = customer.phone;
+                    order.CustomerAdrress = customer.phone;
+                    //Send booksList to  admin 
+                    _db.Order.Add(order);
+                    _db.SaveChanges();
+                    
                     _db.ShoppingCart.Remove(item);
                     _db.SaveChanges();
                 }
             }
             customer.TotalNoBook = 0;
             customer.Totalprice = 0;
-            //Send booksList to  admin  
-
         }
         public Book GetBookById(int id)
         {
@@ -220,5 +232,68 @@ namespace BookStore.Services
             }
             return ShoppingList;
         }
+        public Customer GetCustomer(int Customerid) {
+            Customer customer = _db.Customer.First(x => x.ID == Customerid);
+            return customer;
+        }
+        public Customer GetCustomerbyemail(string email)
+        {
+            Customer? customer = _db.Customer.FirstOrDefault(x => x.email == email);
+            return customer;
+        }
+        public Customer loginCustomer(string email, string password)
+        {
+            Customer? Customer = _db.Customer.FirstOrDefault(x => x.email == email);
+            if (Customer == null) return null;
+            else
+            {
+                var decryptedpassword = Convert.FromBase64String(Customer.password);
+                var result = Encoding.UTF8.GetString(decryptedpassword);
+                result = result.Substring(0, result.Length);
+                if (result == password) return Customer;
+                else return null;
+            }
+        }
+        public Customer reisterCustomer(string name, string phone, string email, string newpassword, string repeatepassword)
+        {
+            if (String.Equals(newpassword,repeatepassword))
+            {
+               
+                Customer user = new Customer();
+                Customer? checkemail = _db.Customer.FirstOrDefault(x => x.email == email);
+                if (checkemail != null) return null;
+                else
+                {
+                    var password = Encoding.UTF8.GetBytes(newpassword);
+                    user.password = Convert.ToBase64String(password);
+                    user.email = email;
+                    user.Name = name;
+                    user.phone = phone;
+                    user.Totalprice = 0;
+                    user.TotalNoBook = 0;
+                    _db.Customer.Add(user);
+                    _db.SaveChanges();
+                    return user;
+                }
+            }
+            else return null;
+        }
+        public int UpdateCustomer(int id,string name, string phone, string email ,string newpassword, string repeatepassword) {
+
+            if (newpassword == repeatepassword)
+            {
+
+                Customer check = _db.Customer.First(x => x.ID == id);
+                check.email = email;
+                check.Name = name;
+                check.phone = phone;
+                check.password = newpassword;
+                _db.Customer.Update(check);
+                _db.SaveChanges();
+                return 1;
+            }
+            else return 0;   
+        }
+
     }
 }

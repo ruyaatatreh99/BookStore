@@ -23,6 +23,14 @@ namespace BookStore.Services
             _db.Book.Remove(book);
             _db.SaveChanges();
         }
+
+        public void DeleteOrder(int id)
+        {
+            var order = _db.Order.First(x => x.ID == id);
+            _db.Order.Remove(order);
+            _db.SaveChanges();
+        }
+
         public IEnumerable<Book> GetAllBooks()
         {
             IEnumerable<Book> booksList;
@@ -37,6 +45,14 @@ namespace BookStore.Services
             }
             return booksList;
         }
+
+        public IEnumerable<Order> GetAllOrder()
+        {
+            IEnumerable<Order> OrderList;
+            OrderList = _db.Order.OrderBy(book => book.ID).ToList();
+            return OrderList;
+        }
+
         public Book GetBookById(int id)
         {
             var check = _db.Book.First(x => x.ISBN == id);

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace BookStore.Model
 {
@@ -14,6 +15,9 @@ namespace BookStore.Model
         [Required(ErrorMessage = "password required")]
         [MinLength(9)]
         public string? password { get; set; }
+        [Required(ErrorMessage = "phone required")]
+        [MinLength(9)]
+        public string? phone { get; set; }
         [Required(ErrorMessage = "Email required")]
         [EmailAddress]
         public string? email { get; set; }

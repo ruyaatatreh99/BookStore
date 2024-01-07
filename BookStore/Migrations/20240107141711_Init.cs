@@ -39,6 +39,7 @@ namespace BookStore.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TotalNoBook = table.Column<int>(type: "int", nullable: false),
                     Totalprice = table.Column<double>(type: "float", nullable: false)
@@ -64,6 +65,24 @@ namespace BookStore.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employee", x => x.EmpID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Order",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ISBN = table.Column<int>(type: "int", nullable: false),
+                    NoBook = table.Column<int>(type: "int", nullable: false),
+                    Bookprice = table.Column<double>(type: "float", nullable: false),
+                    CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CustomerPhone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CustomerAdrress = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Order", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -110,6 +129,9 @@ namespace BookStore.Migrations
 
             migrationBuilder.DropTable(
                 name: "Employee");
+
+            migrationBuilder.DropTable(
+                name: "Order");
 
             migrationBuilder.DropTable(
                 name: "Review");

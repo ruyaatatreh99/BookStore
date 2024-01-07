@@ -61,6 +61,34 @@ namespace BookStore.Controllers
                 return BadRequest(new { status = 500, message = "Error" });
             }
         }
+        [Route("admin/order")]
+        [HttpGet]
+        public IActionResult GetAllOrder()
+        {
+            try
+            {
+                IEnumerable<Order> OrderList = _book.GetAllOrder();
+                return Ok(new { Orders = OrderList });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { status = 500, message = ex });
+            }
+        }
+        [Route("admin/order")]
+        [HttpDelete]
+        public IActionResult DeleteOrder(int orderid)
+        {
+            try
+            {
+                _book.DeleteOrder(orderid);
+                return Ok(new { message = "deleted successfuly" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { status = 500, message = ex });
+            }
+        }
 
         [Route("admin/book/")]
         [HttpGet]

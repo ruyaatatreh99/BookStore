@@ -1,7 +1,10 @@
 ﻿using BookStore.Model;
 using BookStore.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Security.Claims;
 using System.Text;
+using AutoMapper;
 
 namespace BookStore.Controllers
 {
@@ -9,9 +12,31 @@ namespace BookStore.Controllers
     public class BookWebController : ControllerBase
     {
         private readonly IBookWeb _Web;
-        public BookWebController(IBookWeb bWeb)
+        private readonly IMapper _mapper;
+        public BookWebController(IBookWeb bWeb, IMapper mapper)
         {
             _Web = bWeb;
+            _mapper = mapper;
+
+        }
+        [Route("customers/cart")]
+        [HttpGet]
+        public IActionResult ViewShoppingCart(int customerID)
+        {
+            try
+            {
+                IEnumerable<ShoppingCart> result = _Web.ViewShoppingCart(customerID);
+                if (result == null) return NotFound(new { result = "Empty!" });
+                else
+                {
+                    return Ok(new { result = result });
+                }
+            }
+            catch (Exception exc)
+            {
+                return BadRequest(new { status = 500, message = exc });
+            }
+
         }
         [Route("customers/buy")]
         [HttpPost]
@@ -31,10 +56,9 @@ namespace BookStore.Controllers
                 return BadRequest(new { status = 500, message = exc });
             }
         }
-
-            [Route("customers/buy")]
-            [HttpDelete]
-            public IActionResult DeleteBook(int bookid, int customerID)
+        [Route("customers/buy")]
+        [HttpDelete]
+        public IActionResult DeleteBook(int bookid, int customerID)
             {
                 try
                 {
@@ -82,21 +106,6 @@ namespace BookStore.Controllers
                 return BadRequest(new { status = 500, message = ex });
             }
         }
-        [Route("customers/search")]
-        [HttpGet]
-        public IActionResult GetBookBySearch(string name)
-        {
-            try
-            {
-                IEnumerable<Book> book = _Web.GetBookBySearch(name);
-                if (book == null) return NotFound(new { errors = "Error ! Not Found" });
-                else return Ok(new { books = book });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { status = 500, message = ex });
-            }
-        }
         [Route("customers/book")]
         [HttpPut]
         public IActionResult RatingBook(int bookid, int rating)
@@ -105,24 +114,43 @@ namespace BookStore.Controllers
             {
                 int status = _Web.RatingBook(bookid, rating);
                 if (status == 0) return NotFound(new { errors = "Error in Rating book !!" });
-                else return Ok(new { result = "success"  });
+                else return Ok(new { result = "success" });
             }
             catch (Exception ex)
             {
                 return BadRequest(new { status = 500, message = ex });
             }
         }
-        [Route("customers/Review")]
+        [Route("customers/book/review")]
         [HttpPost]
         public IActionResult reviewBook([FromBody] Dictionary<string, string> data)
         {
             try
             {
-              int result= _Web.reviewBook(Int16.Parse(data["bookid"]), data["review"], Int16.Parse(data["customerid"]));
-                if (result !=1) return NotFound(new { errors = "Error in adding review!!" });
+                int result = _Web.reviewBook(Int16.Parse(data["bookid"]), data["review"], Int16.Parse(data["customerid"]));
+                if (result != 1) return NotFound(new { errors = "Error in adding review!!" });
                 else
                 {
                     return Ok(new { result = "Added successfully" });
+                }
+            }
+            catch (Exception exc)
+            {
+                return BadRequest(new { status = 500, message = exc });
+            }
+
+        }
+        [Route("customers/book/review")]
+        [HttpGet]
+        public IActionResult ViewBookReview(int bookid)
+        {
+            try
+            {
+                IEnumerable<Review> result = _Web.ViewBookReview(bookid);
+                if (result == null) return NotFound(new { result = "No reviews Added !" });
+                else
+                {
+                    return Ok(new { result = result });
                 }
             }
             catch (Exception exc)
@@ -150,45 +178,7 @@ namespace BookStore.Controllers
             }
 
         }
-        [Route("customers/book/review")]
-        [HttpGet]
-        public IActionResult ViewBookReview(int bookid)
-        {
-            try
-            {
-                IEnumerable<Review> result = _Web.ViewBookReview(bookid);
-                if (result == null) return NotFound(new { result ="No reviews Added !" });
-                else
-                {
-                    return Ok(new { result = result });
-                }
-            }
-            catch (Exception exc)
-            {
-                return BadRequest(new { status = 500, message = exc });
-            }
-
-        }
-        [Route("customers/cart")]
-        [HttpGet]
-        public IActionResult ViewShoppingCart(int customerID)
-        {
-            try
-            {
-                IEnumerable<ShoppingCart> result = _Web.ViewShoppingCart(customerID);
-                if (result == null) return NotFound(new { result = "Empty!" });
-                else
-                {
-                    return Ok(new { result = result });
-                }
-            }
-            catch (Exception exc)
-            {
-                return BadRequest(new { status = 500, message = exc });
-            }
-
-        }
-        [Route("book/RecommendBook")]
+        [Route("customers/book/recommend-book")]
         [HttpGet]
         public IActionResult RecommendationBook()
         {
@@ -206,6 +196,90 @@ namespace BookStore.Controllers
                 return BadRequest(new { status = 500, message = exc });
             }
 
+        }
+        [Route("customers/search")]
+        [HttpGet]
+        public IActionResult GetBookBySearch(string name)
+        {
+            try
+            {
+                IEnumerable<Book> book = _Web.GetBookBySearch(name);
+                if (book == null) return NotFound(new { errors = "Error ! Not Found" });
+                else return Ok(new { books = book });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { status = 500, message = ex });
+            }
+        }
+        [Route("customers/")]
+        [HttpGet]
+        public IActionResult GetCustomer(int Customerid)
+        {
+            try
+            {
+                Customer customer = _Web.GetCustomer(Customerid);
+
+                if (customer == null) return NotFound(new { errors = "Error ! Not Found" });
+                else {
+                    var customerModel = _mapper.Map<CustomerProfile>(customer);
+                    return Ok(new { customer = customerModel }); }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { status = 500, message = ex });
+            }
+        }
+        [Route("customers/login")]
+        [HttpGet]
+        public IActionResult LoginCustomer(string email, string password)
+        {
+            try
+            {
+                Customer customer = _Web.loginCustomer(email,password);
+                if (customer == null) return NotFound(new { errors = "Error in password or email" });
+                else return Ok(new { result = customer });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.GetBaseException());
+            }
+        }
+        [Route("customers")]
+        [HttpPost]
+        public IActionResult ReisterCustomer([FromBody] Dictionary<string, string> data)
+        {
+            try
+            {
+                Customer check = _Web.GetCustomerbyemail(data["email"]);
+                if (check != null) return NotFound(new { errors = " email aleady exist" });
+                else
+                {
+                    Customer customer = _Web.reisterCustomer(data["name"], data["phone"], data["email"], data["newpassword"], data["repeatepassword"]);
+                    if (customer == null) return NotFound(new { errors = "Error in password or email" });
+                    else return Ok(new { result = customer });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.GetBaseException());
+            }
+        }
+        [Route("customers")]
+        [HttpPut]
+        public IActionResult UpdateCustomer([FromBody] Dictionary<string, string> data)
+        {
+            try
+            {
+                    int check = _Web.UpdateCustomer(Int32.Parse(data["id"]), data["name"], data["phone"], data["email"], data["newpassword"], data["repeatepassword"]);
+                    if (check == 0) return NotFound(new { errors = "Error in password or email" });
+                    else return Ok(new { result = "OK" });
+               
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.GetBaseException());
+            }
         }
 
     }
