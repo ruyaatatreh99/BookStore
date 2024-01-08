@@ -17,9 +17,11 @@ namespace BookStore.Services
         Customer GetCustomer(int Customerid);
         Customer GetCustomerbyemail(string email);
         Customer loginCustomer(string email, string encryptpassword);
-        Customer reisterCustomer(string name, string phone, string email, string newpassword, string repeatepassword);
-        int UpdateCustomer(int id, string name, string phone, string email, string newpassword, string repeatepassword);
+        Customer reisterCustomer(Customer newuser);
+        int UpdateCustomer(int id, string name, string phone, string email, string address);
         void CheckOut(int customerID);
-       
+        int resetpassword(int id, string newpassword, string repeatepassword);
+
+
     }
 }

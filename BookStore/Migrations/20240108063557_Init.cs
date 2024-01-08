@@ -42,7 +42,8 @@ namespace BookStore.Migrations
                     phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TotalNoBook = table.Column<int>(type: "int", nullable: false),
-                    Totalprice = table.Column<double>(type: "float", nullable: false)
+                    Totalprice = table.Column<double>(type: "float", nullable: false),
+                    address = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -59,8 +60,7 @@ namespace BookStore.Migrations
                     email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     username = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    role = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    image = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    role = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

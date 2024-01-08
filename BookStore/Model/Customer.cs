@@ -25,5 +25,6 @@ namespace BookStore.Model
         public int TotalNoBook { get; set; }
         [Required]
         public double Totalprice { get; set; }
+        public string? address { get; set; }
     }
 }

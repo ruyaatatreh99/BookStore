@@ -21,6 +21,5 @@ namespace BookStore.Model
         [Required]
         public string? phone { get; set; }
         public string? role { get; set; }
-        public string? image { get; set; }
     }
 }

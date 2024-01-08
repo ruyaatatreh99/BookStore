@@ -254,45 +254,41 @@ namespace BookStore.Services
                 else return null;
             }
         }
-        public Customer reisterCustomer(string name, string phone, string email, string newpassword, string repeatepassword)
+        public Customer reisterCustomer(Customer newuser)
         {
-            if (String.Equals(newpassword,repeatepassword))
-            {
-               
-                Customer user = new Customer();
-                Customer? checkemail = _db.Customer.FirstOrDefault(x => x.email == email);
+                Customer? checkemail = _db.Customer.FirstOrDefault(x => x.email == newuser.email);
                 if (checkemail != null) return null;
                 else
                 {
-                    var password = Encoding.UTF8.GetBytes(newpassword);
-                    user.password = Convert.ToBase64String(password);
-                    user.email = email;
-                    user.Name = name;
-                    user.phone = phone;
-                    user.Totalprice = 0;
-                    user.TotalNoBook = 0;
-                    _db.Customer.Add(user);
+                    var password = Encoding.UTF8.GetBytes(newuser.password);
+                     newuser.password = Convert.ToBase64String(password);
+                    _db.Customer.Add(newuser);
                     _db.SaveChanges();
-                    return user;
+                    return newuser;
                 }
-            }
-            else return null;
         }
-        public int UpdateCustomer(int id,string name, string phone, string email ,string newpassword, string repeatepassword) {
-
-            if (newpassword == repeatepassword)
-            {
-
+        public int UpdateCustomer(int id,string name, string phone,string email,string address) {
                 Customer check = _db.Customer.First(x => x.ID == id);
                 check.email = email;
                 check.Name = name;
                 check.phone = phone;
-                check.password = newpassword;
+                check.address = address;
                 _db.Customer.Update(check);
+                _db.SaveChanges();
+                return 1;  
+        }
+        public int resetpassword(int id, string newpassword, string repeatepassword)
+        {
+            if (newpassword == repeatepassword)
+            {
+                Customer user = _db.Customer.First(x => x.ID == id);
+                var password = Encoding.UTF8.GetBytes(newpassword);
+                user.password = Convert.ToBase64String(password);
+                _db.Customer.Update(user);
                 _db.SaveChanges();
                 return 1;
             }
-            else return 0;   
+            else return 0;
         }
 
     }

@@ -82,6 +82,9 @@ namespace BookStore.Migrations
                     b.Property<double>("Totalprice")
                         .HasColumnType("float");
 
+                    b.Property<string>("address")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -109,9 +112,6 @@ namespace BookStore.Migrations
 
                     b.Property<string>("email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("image")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("password")

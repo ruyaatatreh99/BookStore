@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookStore.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20240107141711_Init")]
+    [Migration("20240108063557_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -85,6 +85,9 @@ namespace BookStore.Migrations
                     b.Property<double>("Totalprice")
                         .HasColumnType("float");
 
+                    b.Property<string>("address")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -112,9 +115,6 @@ namespace BookStore.Migrations
 
                     b.Property<string>("email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("image")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("password")

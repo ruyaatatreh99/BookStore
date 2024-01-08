@@ -247,15 +247,15 @@ namespace BookStore.Controllers
         }
         [Route("customers")]
         [HttpPost]
-        public IActionResult ReisterCustomer([FromBody] Dictionary<string, string> data)
+        public IActionResult ReisterCustomer([FromBody] Customer newuser)
         {
             try
             {
-                Customer check = _Web.GetCustomerbyemail(data["email"]);
+                Customer? check = _Web.GetCustomerbyemail(newuser.email);
                 if (check != null) return NotFound(new { errors = " email aleady exist" });
                 else
                 {
-                    Customer customer = _Web.reisterCustomer(data["name"], data["phone"], data["email"], data["newpassword"], data["repeatepassword"]);
+                    Customer customer = _Web.reisterCustomer(newuser);
                     if (customer == null) return NotFound(new { errors = "Error in password or email" });
                     else return Ok(new { result = customer });
                 }
@@ -271,8 +271,8 @@ namespace BookStore.Controllers
         {
             try
             {
-                    int check = _Web.UpdateCustomer(Int32.Parse(data["id"]), data["name"], data["phone"], data["email"], data["newpassword"], data["repeatepassword"]);
-                    if (check == 0) return NotFound(new { errors = "Error in password or email" });
+                    int check = _Web.UpdateCustomer(Int32.Parse(data["customerid"]), data["name"], data["phone"], data["email"], data["address"]);
+                    if (check == 0) return NotFound(new { errors = "Error in email" });
                     else return Ok(new { result = "OK" });
                
             }
@@ -281,6 +281,20 @@ namespace BookStore.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.GetBaseException());
             }
         }
-
+        [Route("customers/reset-password")]
+        [HttpPut]
+        public IActionResult Resetpassword(int customerid, string newpassword, string repeatepassword)
+        {
+            try
+            {
+                int check = _Web.resetpassword(customerid, newpassword,repeatepassword);
+                if (check == 0) return NotFound(new { errors = "Not match" });
+                else return Ok(new { result = "OK" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.GetBaseException());
+            }
+        }
     }
 }
